@@ -1,0 +1,95 @@
+package frc.robot;
+
+import edu.wpi.first.wpilibj.TimedRobot;
+import java.util.List;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import edu.wpi.first.wpilibj.Joystick;
+
+public class Robot extends TimedRobot {
+  private VictorSPX driveLeft1 = new VictorSPX(1);
+  private VictorSPX driveRight1 = new VictorSPX(3);
+  private VictorSPX driveLeft2 = new VictorSPX(2);
+  private VictorSPX driveRight2 = new VictorSPX(4);
+
+  private PhotonCamera camera = new PhotonCamera("CamFront");
+  private static final double TARGET_DISTANCE = 36.0; // Target distance in inches
+  private static final double SPEED_SCALING = 0.05; // Scaling factor for proportional control
+  private static final double MIN_SPEED = 0.1; // Minimum speed to overcome stiction
+
+  private double currentDistance = 0.0;
+
+  @Override
+  public void robotInit() {}
+
+  @Override
+  public void robotPeriodic() {
+    // Query the latest result from PhotonVision
+    PhotonPipelineResult result = camera.getLatestResult();
+    if (result.hasTargets()) {
+      var target = result.getBestTarget();
+      currentDistance = target.getBestCameraToTarget().getTranslation().getZ() * 39.37; // Convert meters to inches
+    } else {
+      currentDistance = -1; // No target found
+    }
+  }
+
+  @Override
+  public void autonomousInit() {}
+
+  @Override
+  public void autonomousPeriodic() {
+    if (currentDistance > 0) {
+      double error = TARGET_DISTANCE - currentDistance;
+      double speed = error * SPEED_SCALING;
+
+      // Apply minimum speed to ensure movement
+      if (Math.abs(speed) < MIN_SPEED && Math.abs(error) > 2.0) {
+        speed = Math.copySign(MIN_SPEED, speed);
+      }
+
+      // Stop if within acceptable range
+      if (Math.abs(error) <= 2.0) { // Within 2 inches tolerance
+        speed = 0.0;
+      }
+
+      // Set motor speeds
+      driveLeft1.set(ControlMode.PercentOutput, speed);
+      driveLeft2.set(ControlMode.PercentOutput, speed);
+      driveRight1.set(ControlMode.PercentOutput, speed);
+      driveRight2.set(ControlMode.PercentOutput, speed);
+    } else {
+      // No target found, stop the robot
+      driveLeft1.set(ControlMode.PercentOutput, 0);
+      driveLeft2.set(ControlMode.PercentOutput, 0);
+      driveRight1.set(ControlMode.PercentOutput, 0);
+      driveRight2.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
+  @Override
+  public void teleopInit() {}
+
+  @Override
+  public void teleopPeriodic() {}
+
+  @Override
+  public void disabledInit() {}
+
+  @Override
+  public void disabledPeriodic() {}
+
+  @Override
+  public void testInit() {}
+
+  @Override
+  public void testPeriodic() {}
+
+  @Override
+  public void simulationInit() {}
+
+  @Override
+  public void simulationPeriodic() {}
+}
