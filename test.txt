@@ -1,0 +1,64 @@
+package frc.robot;
+
+import edu.wpi.first.wpilibj.TimedRobot;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.geometry.Transform3d;
+
+public class Test2 extends TimedRobot {
+
+    private static final double TARGET_DISTANCE_METERS = 1.0; // Desired distance from the tag
+    private static final double SPEED_FACTOR = 0.5; // Speed scaling factor for smooth adjustments
+
+    private PhotonCamera camera;
+
+    @Override
+    public void robotInit() {
+        // Initialize PhotonCamera
+        camera = new PhotonCamera("photonvision");
+
+        // Start camera streaming (optional for visualization)
+        UsbCamera usbCamera = CameraServer.startAutomaticCapture();
+        usbCamera.setResolution(640, 480); // Set resolution as required
+    }
+
+    @Override
+    public void robotPeriodic() {
+        // Get the latest result from the PhotonCamera
+        PhotonPipelineResult result = camera.getLatestResult();
+
+        if (result.hasTargets()) {
+            // Get the best target
+            PhotonTrackedTarget target = result.getBestTarget();
+
+            // Get the transform from the camera to the target
+            Transform3d camToTarget = target.getBestCameraToTarget();
+            if (camToTarget != null) {
+                // Extract distance from the camera to the target
+                double distanceToTarget = camToTarget.getTranslation().getX(); // Forward distance in meters
+
+                // Calculate the adjustment needed to maintain 1 meter distance
+                double distanceError = TARGET_DISTANCE_METERS - distanceToTarget;
+                double forwardSpeed = distanceError * SPEED_FACTOR;
+
+                // Limit the speed for smooth control
+                forwardSpeed = Math.max(-0.5, Math.min(0.5, forwardSpeed));
+
+                // Drive the robot forward or backward to adjust its position
+                Constants.ROBOT.setSpeed(forwardSpeed);
+
+                // Log debug information
+                System.out.println("Distance to Target: " + distanceToTarget);
+                System.out.println("Speed Adjustment: " + forwardSpeed);
+            }
+        } else {
+            // No targets detected; stop the robot
+            Constants.ROBOT.setSpeed(0);
+            System.out.println("No targets detected.");
+        }
+    }
+}
