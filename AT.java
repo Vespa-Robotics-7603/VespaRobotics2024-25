@@ -33,14 +33,17 @@ public class Robot extends TimedRobot {
             // Get the best target
             PhotonTrackedTarget target = result.getBestTarget();
 
+            // Get the transform from the camera to the target (if available)
+            Transform3d camToTarget = target.getBestCameraToTarget();
+
             // Retrieve target information
             double yaw = target.getYaw(); // Horizontal angle to target
             double pitch = target.getPitch(); // Vertical angle to target
+            double distanceToTarget = camToTarget.getTranslation().getX(); // Forward distance in meters
 
-            // Get the transform from the camera to the target (if available)
-            Transform3d camToTarget = target.getBestCameraToTarget();
             if (camToTarget != null) {
                 System.out.println("Camera to Target Transform: " + camToTarget);
+                System.out.println("Distance: "+ distanceToTarget);
             }
 
             // Debug output for yaw and pitch
