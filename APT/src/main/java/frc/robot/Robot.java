@@ -16,18 +16,17 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // Initialize PhotonCamera
-        camera = new PhotonCamera("USB_Camera-B4.09.24.1");
-
+        camera = new PhotonCamera("FHD_Camera");
+        
         // Start camera streaming (optional for visualization)
         UsbCamera usbCamera = CameraServer.startAutomaticCapture();
-        usbCamera.setResolution(160, 120);
+        usbCamera.setResolution(352, 288);
     }
 
     @Override
     public void robotPeriodic() {
         // Get the latest result from the PhotonCamera
         PhotonPipelineResult result = camera.getLatestResult();
-
         // Check if the camera has detected any targets
         if (result.hasTargets()) {
             // Get the best target
@@ -35,7 +34,7 @@ public class Robot extends TimedRobot {
 
             // Retrieve target information
             double yaw = target.getYaw(); // Horizontal angle to target
-            double pitch = target.getPitch(); // Vertical angle to target
+            //double pitch = target.getPitch(); // Vertical angle to target
 
             // Get the transform from the camera to the target (if available)
             Transform3d camToTarget = target.getBestCameraToTarget();
@@ -51,10 +50,14 @@ public class Robot extends TimedRobot {
 
                 // Print the distance to the console
                 System.out.println("Distance to Target: " + distance);
+                // Get the id of the apriltag
+                int aprilid = target.getFiducialId();
+                // Print apriltag id
+                System.out.println("Detected ID: " + aprilid);
+                // Debug output for yaw and pitch
+                System.out.println("Yaw: " + yaw);
+                //System.out.println( "Pitch: " + pitch);
             }
-
-            // Debug output for yaw and pitch
-            System.out.println("Yaw: " + yaw + ", Pitch: " + pitch);
         } else {
             // No targets detected
             System.out.println("No targets detected.");
