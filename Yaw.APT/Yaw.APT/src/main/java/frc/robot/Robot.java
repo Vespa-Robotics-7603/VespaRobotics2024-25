@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -42,8 +41,8 @@ public class Robot extends TimedRobot {
   VictorSPX motorR1 = new VictorSPX(5);
   VictorSPX motorR2 = new VictorSPX(6);
   VictorSPX motorL1 = new VictorSPX(10);
-
   driveTrain drive = new driveTrain(motorL1, motorL2, motorR1, motorR2);
+
     private PhotonCamera camera; // Declare the camera instance
 
     @Override
@@ -58,6 +57,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
+
         // Get the latest result from the PhotonCamera
         PhotonPipelineResult result = camera.getLatestResult();
         // Check if the camera has detected any targets
@@ -95,5 +95,15 @@ public class Robot extends TimedRobot {
             // No targets detected
             System.out.println("No targets detected.");
         }
+    }
+
+    @Override
+    public void autonomousInit() {
+      
+    }
+
+    @Override
+    public void autonomousPeriodic() {
+
     }
 }
