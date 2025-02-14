@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -9,8 +10,40 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Transform3d;
 
-public class Robot extends TimedRobot {
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+class driveTrain{
+  // initialzing vars
+  VictorSPX LeftMotor1;
+  VictorSPX LeftMotor2;
+
+  VictorSPX RightMotor1;
+  VictorSPX RightMotor2;
+  //ControlMode1 ControlMode;
+
+  // constructor
+  public driveTrain(VictorSPX LM1, VictorSPX LM2, VictorSPX RM1, VictorSPX RM2){
+      LeftMotor1 = LM1;
+      LeftMotor2 = LM2;
+
+      RightMotor1 = RM1;
+      RightMotor2 = RM2;
+      //control = new ControlMode1();
+  }
+}
+
+public class Robot extends TimedRobot {
+  /**
+   * This function is run when the robot is first started up and should be used for any
+   * initialization code.
+   */
+  VictorSPX motorL2 = new VictorSPX(7);
+  VictorSPX motorR1 = new VictorSPX(5);
+  VictorSPX motorR2 = new VictorSPX(6);
+  VictorSPX motorL1 = new VictorSPX(10);
+
+  driveTrain drive = new driveTrain(motorL1, motorL2, motorR1, motorR2);
     private PhotonCamera camera; // Declare the camera instance
 
     @Override
