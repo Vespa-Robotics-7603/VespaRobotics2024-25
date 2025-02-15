@@ -98,12 +98,38 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void autonomousInit() {
-      
-    }
+public void autonomousPeriodic() {
+    // Get the latest result from the PhotonCamera
+    PhotonPipelineResult result = camera.getLatestResult();
 
-    @Override
-    public void autonomousPeriodic() {
+    // Check if there is a target
+    if (result.hasTargets()) {
+        // Get the best target
+        PhotonTrackedTarget target = result.getBestTarget();
+        double yaw = target.getYaw(); // Get the horizontal angle to the target
 
+        // Proportional control factor (adjust as needed)
+        double kP = 0.02;  // Small factor to avoid too much movement
+        double turnSpeed = kP * yaw; 
+
+        // Limit the turn speed to avoid excessive motion
+        turnSpeed = Math.max(-0.5, Math.min(0.5, turnSpeed)); 
+
+        // Apply turning (positive yaw -> turn right, negative yaw -> turn left)
+        motorL1.set(ControlMode.PercentOutput, turnSpeed);
+        motorL2.set(ControlMode.PercentOutput, turnSpeed);
+        motorR1.set(ControlMode.PercentOutput, -turnSpeed);
+        motorR2.set(ControlMode.PercentOutput, -turnSpeed);
+
+        // Debug output
+        System.out.println("Turning towards target. Yaw: " + yaw + " | Speed: " + turnSpeed);
+    } else {
+        // Stop motors if no target is detected
+        motorL1.set(ControlMode.PercentOutput, 0);
+        motorL2.set(ControlMode.PercentOutput, 0);
+        motorR1.set(ControlMode.PercentOutput, 0);
+        motorR2.set(ControlMode.PercentOutput, 0);
+
+        System.out.println("No targets detected. Stopping.");
     }
 }
