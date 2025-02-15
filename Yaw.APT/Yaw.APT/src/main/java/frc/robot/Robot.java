@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
             double yaw = target.getYaw(); // Get the horizontal angle to the target
 
             // Proportional control factor (adjust as needed)
-            double kP = 0.02;  // Small factor to avoid too much movement
+            double kP = 0.02;
             double turnSpeed = kP * yaw; 
 
             // Limit the turn speed to avoid excessive motion
