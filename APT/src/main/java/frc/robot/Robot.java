@@ -51,9 +51,9 @@ public class Robot extends TimedRobot {
                 // Print the distance to the console
                 System.out.println("Distance to Target: " + distance);
                 // Get the id of the apriltag
-                int aprilid = target.getFiducialId();
+                int AprilId = target.getFiducialId();
                 // Print apriltag id
-                System.out.println("Detected ID: " + aprilid);
+                System.out.println("Detected ID: " + AprilId);
                 // Debug output for yaw and pitch
                 System.out.println("Yaw: " + yaw);
                 //System.out.println( "Pitch: " + pitch);
