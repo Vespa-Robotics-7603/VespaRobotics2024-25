@@ -19,7 +19,7 @@ public class Robot extends TimedRobot
 	private VictorSPX driveLeft1 = new VictorSPX(1);
 	private VictorSPX driveRight1 = new VictorSPX(3);
 	private VictorSPX driveLeft2 = new VictorSPX(2);
-    private VictorSPX driveRight2 = new VictorSPX(4);
+	private VictorSPX driveRight2 = new VictorSPX(4);
 	private Joystick newJoystick = new Joystick(0);
 	CANSparkMax climbMotor = new CANSparkMax(1, MotorType.kBrushless);
 	CANSparkMax bottomShooter = new CANSparkMax(3, MotorType.kBrushed);
