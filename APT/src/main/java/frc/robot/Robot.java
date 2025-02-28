@@ -11,56 +11,53 @@ import edu.wpi.first.math.geometry.Transform3d;
 
 public class Robot extends TimedRobot {
 
-    private PhotonCamera camera; // Declare the camera instance
+    private PhotonCamera camera1; // Declare the camera instance
+    private PhotonCamera camera2; //Declare Camera 2
 
     @Override
     public void robotInit() {
         // Initialize PhotonCamera
-        camera = new PhotonCamera("FHD_Camera");
+        camera1 = new PhotonCamera("FHD_Camera1");
+        camera2 = new PhotonCamera("FHD_Camera2");
         
-        // Start camera streaming (optional for visualization)
-        UsbCamera usbCamera = CameraServer.startAutomaticCapture();
-        usbCamera.setResolution(352, 288);
+        // Start USB camera streaming (optional)
+        UsbCamera usbCamera1 = CameraServer.startAutomaticCapture(0);
+        usbCamera1.setResolution(352, 288);
+
+        UsbCamera usbCamera2 = CameraServer.startAutomaticCapture(1);
+        usbCamera2.setResolution(352, 288);
     }
 
     @Override
     public void robotPeriodic() {
-        // Get the latest result from the PhotonCamera
+        processCamera(camera1, "Camera 1");
+        processCamera(camera2, "Camera 2");
+    }
+
+    private void processCamera(PhotonCamera camera, String cameraName) {
         PhotonPipelineResult result = camera.getLatestResult();
-        // Check if the camera has detected any targets
         if (result.hasTargets()) {
-            // Get the best target
             PhotonTrackedTarget target = result.getBestTarget();
-
-            // Retrieve target information
-            double yaw = target.getYaw(); // Horizontal angle to target
-            //double pitch = target.getPitch(); // Vertical angle to target
-
-            // Get the transform from the camera to the target (if available)
+            double yaw = target.getYaw();
             Transform3d camToTarget = target.getBestCameraToTarget();
-            if (camToTarget != null) {
-                System.out.println("Camera to Target Transform: " + camToTarget);
 
-                // Calculate the 3D distance from the camera to the target
+            if (camToTarget != null) {
                 double distance = Math.sqrt(
                     camToTarget.getTranslation().getX() * camToTarget.getTranslation().getX() +
                     camToTarget.getTranslation().getY() * camToTarget.getTranslation().getY() +
                     camToTarget.getTranslation().getZ() * camToTarget.getTranslation().getZ()
                 );
 
-                // Print the distance to the console
-                System.out.println("Distance to Target: " + distance);
-                // Get the id of the apriltag
                 int AprilId = target.getFiducialId();
-                // Print apriltag id
-                System.out.println("Detected ID: " + AprilId);
-                // Debug output for yaw and pitch
-                System.out.println("Yaw: " + yaw);
-                //System.out.println( "Pitch: " + pitch);
+
+                // Print data per camera
+                System.out.println("[" + cameraName + "] Camera to Target: " + camToTarget);
+                System.out.println("[" + cameraName + "] Distance: " + distance);
+                System.out.println("[" + cameraName + "] Detected ID: " + AprilId);
+                System.out.println("[" + cameraName + "] Yaw: " + yaw);
             }
         } else {
-            // No targets detected
-            System.out.println("No targets detected.");
+            System.out.println("[" + cameraName + "] No targets detected.");
         }
     }
 }
