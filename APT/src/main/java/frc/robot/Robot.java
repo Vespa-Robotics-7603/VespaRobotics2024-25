@@ -17,8 +17,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // Initialize PhotonCamera
-        camera1 = new PhotonCamera("FHD_Camera1");
-        camera2 = new PhotonCamera("FHD_Camera2");
+        camera1 = new PhotonCamera("FHD_Camera");
+        camera2 = new PhotonCamera("Cam_2");
         
         // Start USB camera streaming (optional)
         UsbCamera usbCamera1 = CameraServer.startAutomaticCapture(0);
