@@ -15,7 +15,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public double getPeriod(){
-        return 0.02 // run every 2ms
+        return 0.02; // run every 2ms
     }
     
     @Override
