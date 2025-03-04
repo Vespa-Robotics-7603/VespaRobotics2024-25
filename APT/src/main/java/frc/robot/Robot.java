@@ -14,6 +14,11 @@ public class Robot extends TimedRobot {
     private PhotonCamera camera; // Declare the camera instance
 
     @Override
+    public double getPeriod(){
+        return 0.02 // run every 2ms
+    }
+    
+    @Override
     public void robotInit() {
         // Initialize PhotonCamera
         camera = new PhotonCamera("FHD_Camera");
