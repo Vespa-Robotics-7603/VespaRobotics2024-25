@@ -58,10 +58,14 @@ public class CoralPivot implements Subsystem{
         armMotor.goToSetPosition(1);
     }
     
+    public void armWithSpeed(double speed){
+        armMotor.setSpeed(speed);
+    }
+    
     @Override
     public void periodic(){
-        armMotor.resetReference();
-        System.out.println(armMotor.Motor.getEncoder().getPosition());
+        // armMotor.resetReference();
+        // System.out.println("Arm motor position: " + armMotor.Motor.getEncoder().getPosition());
     }
     public Command toOutput(){
         return runOnce(() -> {
@@ -72,6 +76,20 @@ public class CoralPivot implements Subsystem{
         return runOnce(() -> {
             armIntake();
         });
+    }
+    
+    public Command setSpeed(double speed){
+        return runOnce(()->{
+            this.setSpeed(speed);
+        });
+    }
+    
+    public void moveArm(double speed){
+        armMotor.Motor.set(speed);
+    }
+    
+    public Command moveArmCommand(double speed){
+        return run(()->{moveArm(speed);});
     }
 
     

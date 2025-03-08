@@ -42,7 +42,16 @@ public class CoralIntake implements Subsystem {
     }
     
     public void CoralOut(){
-        intakeMotor.set(ControlMode.PercentOutput, -0.1);
+        intakeMotor.set(ControlMode.PercentOutput, -0.3);
+    }
+    
+    public void hold(){
+        System.out.println("HOLDING!!!!");
+        intakeMotor.set(ControlMode.PercentOutput, -0.07);
+    }
+    
+    public Command holdCom(){
+        return run(this::hold);
     }
     
     @Override
@@ -54,7 +63,7 @@ public class CoralIntake implements Subsystem {
     }
 
     public Command CoralInCom(){
-        return Commands.sequence(runOnce(this::CoralIn), new WaitCommand(0.5), runOnce(this::CoralStop));
+        return Commands.sequence(runOnce(this::CoralIn), new WaitCommand(1), runOnce(this::CoralStop));
     }
     public Command CoralOutCom(){
         return Commands.sequence(runOnce(this::CoralOut), new WaitCommand(0.5), runOnce(this::CoralStop));

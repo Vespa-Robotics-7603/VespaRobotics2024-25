@@ -107,6 +107,13 @@ public class Elevator implements Subsystem {
         upDownMotor.goToRotation(levels[level]);
     }
     
+    public void moveElevator(double speed){
+        upDownMotor.Motor.set(speed);
+    }
+    
+    public Command moveElevatorCommand(double speed){
+        return run(()->{moveElevator(speed);});
+    }
     
     
     public void moveElavatorWithSpeed(double speed){
@@ -119,6 +126,7 @@ public class Elevator implements Subsystem {
         // armMotor.resetReference();
         // coralIntakeMotor.resetReference();
         //System.out.println("Running Periodic");
+        // System.out.println("Elevator position: " + upDownMotor.Motor.getEncoder().getPosition());
     }
     //Using run once here because the motor will continue to go to position/speed
     //it doesn't need to be called periodically, only when a change in motion is wanted
