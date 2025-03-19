@@ -72,11 +72,10 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    //Add PhotonVision Dependencies (installed and configured)
-    implementation 'org.photonvision:photonlib:2025.2.1'
-
 }
+
+//Add PhotonVision Dependencies (installed and configured)
+//implementation 'org.photonvision:photonlib:2025.2.1'
 
 test {
     useJUnitPlatform()
