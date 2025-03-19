@@ -72,6 +72,9 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    //Add PhotonVision Dependencies (installed and configured)
+    implementation 'org.photonvision:photonlib:latest-release'
 }
 
 test {
@@ -101,9 +104,4 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
-}
-
-//Add PhotonVision Dependencies (installed and configured)
-dependencies {
-    implementation 'org.photonvision:photonlib:latest-release'
 }
