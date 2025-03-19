@@ -1,0 +1,109 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterOnePath"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Lift Elevator"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Output"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deposite Coral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Intake Level"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterTwoPath"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup Coral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Lift Elevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Output"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterThreePath"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deposite Coral"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
