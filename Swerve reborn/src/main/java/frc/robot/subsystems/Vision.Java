@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionSubsystem extends SubsystemBase {
-    private final PhotonCamera camera = new PhotonCamera("Camera_Name");
+    private final PhotonCamera camera1 = new PhotonCamera("FHD_Camera");
 
     public VisionSubsystem() {}
 
