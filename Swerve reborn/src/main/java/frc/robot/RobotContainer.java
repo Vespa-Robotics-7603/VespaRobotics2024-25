@@ -75,6 +75,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("Center Auto");
+        //return new PathPlannerAuto("Center Auto");
+        System.out.println("No auto right now.");
     }
 }

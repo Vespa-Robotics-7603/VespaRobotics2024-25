@@ -10,31 +10,32 @@ public class Vision extends SubsystemBase {
     private final PhotonCamera camera = new PhotonCamera("FHD_Camera");
 
     public Vision() {
+        // Constructor code, if necessary
+    }
 
-        public PhotonTrackedTarget getBestTarget() {
-            PhotonPipelineResult result = camera.getLatestResult();
-            if (result.hasTargets()) {
-                return result.getBestTarget();
-            }
-            return null;
-     }
-
-        public Transform2d getTargetTransform() {
-            PhotonTrackedTarget target = getBestTarget();
-            if (target != null) {
-                return target.getBestCameraToTarget();
-            }
-            return null;
+    public PhotonTrackedTarget getBestTarget() {
+        PhotonPipelineResult result = camera.getLatestResult();
+        if (result.hasTargets()) {
+            return result.getBestTarget();
         }
+        return null;
+    }
 
-        public double getTargetYaw() {
-            PhotonTrackedTarget target = getBestTarget();
-            return (target != null) ? target.getYaw() : 0.0;
+    public Transform2d getTargetTransform() {
+        PhotonTrackedTarget target = getBestTarget();
+        if (target != null) {
+            return target.getBestCameraToTarget();
         }
+        return null;
+    }
 
-        public double getTargetDistance() {
-            PhotonTrackedTarget target = getBestTarget();
-            return (target != null) ? target.getBestCameraToTarget().getX() : -1;
-        }
+    public double getTargetYaw() {
+        PhotonTrackedTarget target = getBestTarget();
+        return (target != null) ? target.getYaw() : 0.0;
+    }
+
+    public double getTargetDistance() {
+        PhotonTrackedTarget target = getBestTarget();
+        return (target != null) ? target.getBestCameraToTarget().getX() : -1;
     }
 }
