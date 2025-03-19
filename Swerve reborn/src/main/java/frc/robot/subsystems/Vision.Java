@@ -7,7 +7,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class VisionSubsystem extends SubsystemBase {
+public class Vision implements Subsystem {
     private final PhotonCamera camera1 = new PhotonCamera("FHD_Camera");
 
     //Note: 
