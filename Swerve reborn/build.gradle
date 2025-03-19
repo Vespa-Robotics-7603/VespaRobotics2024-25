@@ -102,3 +102,8 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+
+//Add PhotonVision Dependencies (installed and configured)
+dependencies {
+    implementation 'org.photonvision:photonlib:latest-release'
+}
