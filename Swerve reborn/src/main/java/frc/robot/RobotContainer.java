@@ -70,6 +70,19 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        //This method loads the auto when it is called, however, it is recommended
+        //to first load your paths/autos when code starts, then return the
+        //pre-loaded auto/path
+        Optional<Alliance> al = DriverStation.getAlliance();
+        if(al.isPresent()){
+            if(al.get() == Alliance.Blue){
+               return new PathPlannerAuto("Far Left Auto");
+            }
+            if(al.get() == Alliance.Red){
+                return new PathPlannerAuto("Far Left Auto RED");
+            }
+        }
+        return new PathPlannerAuto("Far Left Auto");
+        //return new PathPlannerAuto("Just Jerk");
     }
 }
