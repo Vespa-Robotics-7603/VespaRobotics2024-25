@@ -10,6 +10,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class VisionSubsystem extends SubsystemBase {
     private final PhotonCamera camera1 = new PhotonCamera("FHD_Camera");
 
+    //Note: 
+    //UsbCamera usbCamera1 = CameraServer.startAutomaticCapture(0);
+    //usbCamera1.setResolution(352, 288);
+    // This is maybe not needed
+
     public VisionSubsystem() {}
 
     public PhotonTrackedTarget getBestTarget() {
