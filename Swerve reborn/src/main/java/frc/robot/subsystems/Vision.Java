@@ -1,9 +1,13 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
@@ -21,7 +25,7 @@ public class Vision extends SubsystemBase {
         return null;
     }
 
-    public Transform2d getTargetTransform() {
+    public Transform3d getTargetTransform() {
         PhotonTrackedTarget target = getBestTarget();
         if (target != null) {
             return target.getBestCameraToTarget();
