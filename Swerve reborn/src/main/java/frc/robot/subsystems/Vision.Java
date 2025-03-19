@@ -2,19 +2,42 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.generated.TunerConstants;
+
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
     private final PhotonCamera camera = new PhotonCamera("FHD_Camera");
+    private static final double TARGET_DISTANCE_METERS = 1.0; // Stop at 1 meter from the tag
+    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private final CommandSwerveDrivetrain drivetrain;
 
-    public Vision() {
-        // Constructor code, if necessary
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric();
+            //.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate*0.1)
+            //.withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+    public Vision(CommandSwerveDrivetrain train) {
+        System.out.println("Vision System Initialized");
+        
+        // Print values from methods correctly
+        System.out.println("Target Yaw: " + getTargetYaw());
+        System.out.println("Target Distance: " + getTargetDistance());
+        drivetrain = train;
     }
 
     public PhotonTrackedTarget getBestTarget() {
@@ -43,6 +66,37 @@ public class Vision extends SubsystemBase {
         return (target != null) ? target.getBestCameraToTarget().getX() : -1;
     }
 
-    
+    public Command followAprilTag(){
+        
+            var target = this.getBestTarget();
+        
+            if (target != null) {
+                // Get distance and angle to the AprilTag
+                double targetYaw = this.getTargetYaw(); // Degrees
+                double targetDistance = this.getTargetDistance(); // Meters
 
+                System.out.println(targetYaw);
+                System.out.println(targetDistance);
+
+                // Compute movement speeds
+                double forwardSpeed =  -Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * MaxSpeed)); // Speed scales based on distance
+                //double rotationSpeed = -targetYaw * MaxAngularRate; // Scale yaw to rotation (negative to correct direction)
+                System.out.println("Speed " + forwardSpeed);
+                // Create a movement request
+                return drivetrain.applyRequest(() ->
+                    drive.withVelocityX(forwardSpeed) // Move forward
+                        .withVelocityY(0) // No lateral movement
+                        .withRotationalRate(0) // Rotate to align with the tag
+                );
+            } else {
+                return run(() -> {
+                    System.out.println("Tag not found");
+                });
+            }
+    }
+    public Command PayGorn(){
+        return run(() -> {
+            System.out.println("PayGorn");
+        });
+    }
 }
