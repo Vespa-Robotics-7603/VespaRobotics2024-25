@@ -21,7 +21,6 @@ public class FollowAprilTagCommand extends Command {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-
     public FollowAprilTagCommand(Vision visionSubsystem, CommandSwerveDrivetrain drivetrain) {
         this.visionSubsystem = visionSubsystem;
         this.drivetrain = drivetrain;
@@ -38,8 +37,8 @@ public class FollowAprilTagCommand extends Command {
             double targetDistance = visionSubsystem.getTargetDistance(); // Meters
 
             // Compute movement speeds
-            double forwardSpeed = Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * 0.6)); // Speed scales based on distance
-            double rotationSpeed = -targetYaw * 0.02; // Scale yaw to rotation (negative to correct direction)
+            double forwardSpeed = Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * MaxSpeed)); // Speed scales based on distance
+            double rotationSpeed = -targetYaw * MaxAngularRate; // Scale yaw to rotation (negative to correct direction)
 
             // Create a movement request
             drivetrain.applyRequest(() -> 

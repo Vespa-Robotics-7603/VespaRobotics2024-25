@@ -42,4 +42,7 @@ public class Vision extends SubsystemBase {
         PhotonTrackedTarget target = getBestTarget();
         return (target != null) ? target.getBestCameraToTarget().getX() : -1;
     }
+
+    
+
 }
