@@ -15,6 +15,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -45,6 +46,9 @@ public class Vision extends SubsystemBase {
         System.out.println("Target Yaw: " + getTargetYaw());
         System.out.println("Target Distance: " + getTargetDistance());
         drivetrain = train;
+
+        snapTo.HeadingController = new PhoenixPIDController(1, 0, 0);
+        snapTo.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     public PhotonTrackedTarget getBestTarget() {
@@ -73,75 +77,40 @@ public class Vision extends SubsystemBase {
         return (target != null) ? target.getBestCameraToTarget().getX() : -1;
     }
 
-    // public Command followAprilTag(){
+    public Command followAprilTag(){
         
-    //         var target = this.getBestTarget();
-        
-    //         if (target != null) {
-    //             // Get distance and angle to the AprilTag
-    //             double targetYaw = this.getTargetYaw(); // Degrees
-    //             double targetDistance = this.getTargetDistance(); // Meters
-
-    //             System.out.println("Yaw: " + targetYaw);
-    //             System.out.println("Target Distance: " + targetDistance);
-
-    //             System.out.println("Pose: " + drivetrain.getState().Pose);
-
-    //             // Compute movement speeds
-    //             double forwardSpeed =  -Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * MaxSpeed)); // Speed scales based on distance
-    //             double rotationSpeed = -targetYaw * MaxAngularRate * 0.2; // Scale yaw to rotation (negative to correct direction)
-    //             System.out.println("Speed: " + 0);
-    //             // Create a movement request
-    //             return drivetrain.applyRequest(() ->
-    //                 snapTo.withVelocityX(0)
-    //                 .withVelocityY(0)
-    //                 .withTargetDirection(Rotation2d.fromDegrees(180))
-    //             );
-    //         } else {
-    //             return drivetrain.applyRequest(() -> 
-    //                 drive.withVelocityX(0)
-    //                 .withVelocityY(0)
-    //                 .withRotationalRate(0)
-    //             );
-    //         }
-    // }
-
-    public Command followAprilTag() {
-        return run(() -> {
             var target = this.getBestTarget();
+        
             if (target != null) {
+                // Get distance and angle to the AprilTag
                 double targetYaw = this.getTargetYaw(); // Degrees
                 double targetDistance = this.getTargetDistance(); // Meters
-    
+
                 System.out.println("Yaw: " + targetYaw);
-                System.out.println("Distance: " + targetDistance);
-    
-                if (targetDistance <= TARGET_DISTANCE_METERS) {
-                    System.out.println("Arrived at target!");
-                    drivetrain.applyRequest(() -> 
-                        drive.withVelocityX(0) // Stop moving
-                             .withVelocityY(0)
-                             .withRotationalRate(0)
-                    );
-                    return;
-                }
-    
-                // Compute forward speed based on distance, limit between 0.2 and 1.0
-                double forwardSpeed = -Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * MaxSpeed));
-    
-                System.out.println("Speed: " + forwardSpeed);
-    
-                drivetrain.applyRequest(() -> 
-                    drive.withVelocityX(forwardSpeed) // Move forward
-                         .withVelocityY(0)
-                         .withRotationalRate(0)
+                System.out.println("Target Distance: " + targetDistance);
+                System.out.println("Pose: " + drivetrain.getState().Pose);
+
+                // Compute movement speeds
+                double forwardSpeed =  -Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * MaxSpeed)); // Speed scales based on distance
+                double rotationSpeed = -targetYaw * MaxAngularRate * 0.2; // Scale yaw to rotation (negative to correct direction)
+                System.out.println("Speed: " + 0);
+
+                // Create a movement request
+                return drivetrain.applyRequest(() ->
+                    snapTo.withVelocityX(0)
+                    .withVelocityY(0)
+                    .withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
+                    // snapTo.withVelocityX(0) // No forward movement for now
+                    //     .withVelocityY(0)
+                    //     .withTargetDirection(Rotation2d.fromDegrees(-targetYaw)) // Rotate toward tag
+
                 );
             } else {
-                System.out.println("Tag not found");
+                return run(() -> {
+                    System.out.println("No fucking robot");
+                });
             }
-        }).withTimeout(5); // Safety timeout to prevent endless running
     }
-
     public Command PayGorn(){
         return run(() -> {
             System.out.println("PayGorn");
