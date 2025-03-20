@@ -97,17 +97,13 @@ public class Vision extends SubsystemBase {
 
                 // Create a movement request
                 return drivetrain.applyRequest(() ->
-                    snapTo.withVelocityX(0)
-                    .withVelocityY(0)
+                    snapTo.withVelocityX(forwardSpeed)
+                    .withVelocityY(targetYaw)
                     .withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
-                    // snapTo.withVelocityX(0) // No forward movement for now
-                    //     .withVelocityY(0)
-                    //     .withTargetDirection(Rotation2d.fromDegrees(-targetYaw)) // Rotate toward tag
-
                 );
             } else {
                 return run(() -> {
-                    System.out.println("No fucking April tag!");
+                    System.out.println("No April tag!");
                 });
             }
     }
