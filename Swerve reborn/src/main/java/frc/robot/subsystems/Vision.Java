@@ -77,87 +77,38 @@ public class Vision extends SubsystemBase {
         return (target != null) ? target.getBestCameraToTarget().getX() : -1;
     }
 
-    // public Command followAprilTag(){
+    public Command followAprilTag(){
         
-    //         var target = this.getBestTarget();
+            var target = this.getBestTarget();
         
-    //         if (target != null) {
-    //             // Get distance and angle to the AprilTag
-    //             double targetYaw = this.getTargetYaw(); // Degrees
-    //             double targetDistance = this.getTargetDistance(); // Meters
-
-    //             System.out.println("Yaw: " + targetYaw);
-    //             System.out.println("Target Distance: " + targetDistance);
-    //             System.out.println("Pose: " + drivetrain.getState().Pose);
-
-    //             // Compute movement speeds
-    //             double forwardSpeed =  -Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * MaxSpeed)); // Speed scales based on distance
-    //             double rotationSpeed = -targetYaw * MaxAngularRate * 0.2; // Scale yaw to rotation (negative to correct direction)
-    //             System.out.println("Speed: " + 0);
-
-    //             // Create a movement request
-    //             return drivetrain.applyRequest(() ->
-    //                 snapTo.withVelocityX(0)
-    //                 .withVelocityY(0)
-    //                 .withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
-    //                 // snapTo.withVelocityX(0) // No forward movement for now
-    //                 //     .withVelocityY(0)
-    //                 //     .withTargetDirection(Rotation2d.fromDegrees(-targetYaw)) // Rotate toward tag
-
-    //             );
-    //         } else {
-    //             return run(() -> {
-    //                 System.out.println("No fucking robot");
-    //             });
-    //         }
-    // }
-    public Command followAprilTag() { // lee code 2 test
-        return this.run(() -> {
-            var target = getBestTarget();
             if (target != null) {
-                Pose2d currentPose = drivetrain.getState().Pose;
-                
-                int targetId = target.getFiducialId();
-                Transform3d tagPose = aprilTagFieldLayout.getTagPose(targetId).get();
-                Pose2d targetPose = new Pose2d(
-                    tagPose.getTranslation().toTranslation2d(),
-                    new Rotation2d()
+                // Get distance and angle to the AprilTag
+                double targetYaw = this.getTargetYaw(); // Degrees
+                double targetDistance = this.getTargetDistance(); // Meters
+
+                System.out.println("Yaw: " + targetYaw);
+                System.out.println("Target Distance: " + targetDistance);
+                System.out.println("Pose: " + drivetrain.getState().Pose);
+
+                // Compute movement speeds
+                double forwardSpeed =  -Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * MaxSpeed)); // Speed scales based on distance
+                double rotationSpeed = -targetYaw * MaxAngularRate * 0.2; // Scale yaw to rotation (negative to correct direction)
+                System.out.println("Speed: " + 0);
+
+                // Create a movement request
+                return drivetrain.applyRequest(() ->
+                    snapTo.withVelocityX(0)
+                    .withVelocityY(0)
+                    .withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
+                    // snapTo.withVelocityX(0) // No forward movement for now
+                    //     .withVelocityY(0)
+                    //     .withTargetDirection(Rotation2d.fromDegrees(-targetYaw)) // Rotate toward tag
+
                 );
-    
-                Rotation2d targetDirection = new Rotation2d(
-                    targetPose.getX() - currentPose.getX(),
-                    targetPose.getY() - currentPose.getY()
-                );
-    
-                double distance = PhotonUtils.calculateDistanceToTarget(
-                    CAMERA_HEIGHT_METERS,
-                    TAG_HEIGHT_METERS,
-                    CAMERA_PITCH_RADIANS,
-                    Units.degreesToRadians(target.getPitch())
-                );
-    
-                double forwardSpeed = distanceController.calculate(
-                    distance, 
-                    TARGET_DISTANCE_METERS
-                );
-                
-                double rotationSpeed = rotationController.calculate(
-                    currentPose.getRotation().getDegrees(), 
-                    targetDirection.getDegrees()
-                );
-    
-                drivetrain.applyRequest(() -> 
-                    snapTo
-                        .withVelocityX(forwardSpeed * MaxSpeed)
-                        .withVelocityY(0) // Pure forward movement
-                        .withTargetDirection(targetDirection)
-                );
-    
-                // debug
-                SmartDashboard.putNumber("Target Yaw: ", target.getYaw());
-                SmartDashboard.putNumber("Target Distance: ", distance);
-                SmartDashboard.putString("Target Pose: ", targetPose.toString());
+            } else {
+                return run(() -> {
+                    System.out.println("No fucking April tag!");
+                });
             }
-        }).withName("Follow AprilTag");
     }
 }
