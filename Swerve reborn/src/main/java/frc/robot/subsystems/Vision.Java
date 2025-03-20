@@ -99,6 +99,7 @@ public class Vision extends SubsystemBase {
                 return drivetrain.applyRequest(() ->
                     snapTo.withVelocityX(0)
                     .withVelocityY(0)
+                    //.withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
                     .withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
                     // snapTo.withVelocityX(0) // No forward movement for now
                     //     .withVelocityY(0)
