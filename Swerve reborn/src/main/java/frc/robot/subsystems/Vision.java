@@ -77,7 +77,7 @@ public class Vision extends SubsystemBase {
         return (target != null) ? target.getBestCameraToTarget().getX() : -1;
     }
 
-    public Command followAprilTag(){
+    public void followAprilTag(){
         
             var target = this.getBestTarget();
         
@@ -96,15 +96,35 @@ public class Vision extends SubsystemBase {
                 System.out.println("Speed: " + 0);
 
                 // Create a movement request
-                return drivetrain.applyRequest(() ->
-                    snapTo.withVelocityX(forwardSpeed)
-                    .withVelocityY(targetYaw)
-                    .withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
+                // return drivetrain.applyRequest(() ->
+                //     snapTo.withVelocityX(0)
+                //     .withVelocityY(0)
+                //     .withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
+                // );
+                drivetrain.setControl(
+                    drive.withVelocityX(0) // Stop moving
+                    .withVelocityY(0)
+                    .withRotationalRate(0)
                 );
+
+                // return drivetrain.applyRequest(() -> 
+                //          drive.withVelocityX(0) // Stop moving
+                //               .withVelocityY(0)
+                //               .withRotationalRate(0)
+                //      );
+
             } else {
-                return run(() -> {
-                    System.out.println("No April tag!");
-                });
+                // return run(() -> {
+                //     System.out.println("No April tag!");
+                // });
+                System.out.println("No April tag!");
             }
-    }
+    }  
+    public Command APT(){
+        return run(()->{
+            followAprilTag();
+        });
+    }              
 }
+    
+    
