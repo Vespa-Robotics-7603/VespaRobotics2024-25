@@ -47,6 +47,7 @@ public class Vision extends SubsystemBase {
 
         snapTo.HeadingController = new PhoenixPIDController(1, 0, 0);
         snapTo.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+        turnPID.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     public PhotonTrackedTarget getBestTarget() {
@@ -74,7 +75,13 @@ public class Vision extends SubsystemBase {
         PhotonTrackedTarget target = getBestTarget();
         return (target != null) ? target.getBestCameraToTarget().getX() : -1;
     }
+    public double getTargetDistanceY() {
+        PhotonTrackedTarget target = getBestTarget();
+        return (target != null) ? target.getBestCameraToTarget().getY() : -1;
+    }
 
+PhoenixPIDController turnPID = new PhoenixPIDController(0, 0, 0);
+PhoenixPIDController drivePID = new PhoenixPIDController(0, 0, 0);
     public void followAprilTag(){
         
             var target = this.getBestTarget();
@@ -83,10 +90,26 @@ public class Vision extends SubsystemBase {
                 // Get distance and angle to the AprilTag
                 double targetYaw = this.getTargetYaw(); // Degrees
                 double targetDistance = this.getTargetDistance(); // Meters
+                double targetDistanceY = this.getTargetDistanceY(); // IDK Maybe meters
+                double CurrentRobot = drivetrain.getState().Pose.getX();
+                double CurrentRobotYaw = drivetrain.getState().Pose.getRotation().getRadians();
+
+                double targetSetPoint = CurrentRobot + targetDistance - 1; //Where the robot should go
+                double targetSetPointYaw = CurrentRobotYaw + targetYaw - 0;
+
+
+                double drivething = drivePID.calculate(CurrentRobot,targetSetPoint,0.2);
+                double turnthing = turnPID.calculate(CurrentRobotYaw,targetSetPointYaw,0.2);
+                // Current Time Stamp Never 0!!!!!!!!!!!!!
 
                 System.out.println("Yaw: " + targetYaw);
-                System.out.println("Target Distance: " + targetDistance);
+                System.out.println("(X) Target Distance: " + targetDistance);
                 System.out.println("Pose: " + drivetrain.getState().Pose);
+                System.out.println("Y:" + targetDistanceY);
+
+                System.out.println(drivething);
+                System.out.println(turnthing);
+
 
                 // Compute movement speeds
                 double forwardSpeed =  -Math.max(0.2, Math.min(1.0, (targetDistance - TARGET_DISTANCE_METERS) * MaxSpeed)); // Speed scales based on distance
@@ -95,7 +118,7 @@ public class Vision extends SubsystemBase {
 
                 // Create a movement request
                     drivetrain.setControl(
-                    drive.withVelocityX(targetDistance) // Stop moving
+                    drive.withVelocityX(0)
                     .withVelocityY(0)
                     .withRotationalRate(0)
                 );
