@@ -8,8 +8,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import java.rmi.server.RMIClassLoader;
-
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -96,22 +94,17 @@ public class Vision extends SubsystemBase {
                 System.out.println("Speed: " + 0);
 
                 // Create a movement request
-                // return drivetrain.applyRequest(() ->
-                //     snapTo.withVelocityX(0)
-                //     .withVelocityY(0)
-                //     .withTargetDirection(Rotation2d.fromDegrees(-targetYaw))
-                // );
-                drivetrain.setControl(
-                    drive.withVelocityX(0) // Stop moving
+                    drivetrain.setControl(
+                    drive.withVelocityX(targetDistance) // Stop moving
                     .withVelocityY(0)
                     .withRotationalRate(0)
                 );
 
-                // return drivetrain.applyRequest(() -> 
-                //          drive.withVelocityX(0) // Stop moving
-                //               .withVelocityY(0)
-                //               .withRotationalRate(0)
-                //      );
+                // drivetrain.setControl(
+                //     drive.withVelocityX(0) // Stop moving
+                //     .withVelocityY(0)
+                //     .withRotationalRate(0)
+                // );
 
             } else {
                 // return run(() -> {
