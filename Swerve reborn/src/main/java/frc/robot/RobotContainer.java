@@ -75,7 +75,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //return Commands.print("No autonomous command configured");
-       return visionSubsystem1.APT();
+        return null;
        //return new PathPlannerAuto("Test Auto but better");
         
     }

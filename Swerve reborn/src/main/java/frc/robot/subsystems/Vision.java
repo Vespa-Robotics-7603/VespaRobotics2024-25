@@ -24,7 +24,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
-    private final PhotonCamera camera;
+    private PhotonCamera camera;
     private static final double distance2tag = 1.0; // Stop at 1 meter from the tag
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -33,6 +33,10 @@ public class Vision extends SubsystemBase {
         .FieldCentricFacingAngle()
         .withDeadband(MaxSpeed*0.035)
         .withDriveRequestType(DriveRequestType.Velocity);
+    private boolean currentCam = true; // true means top camera, false means bottom camera
+
+    private final PhotonCamera topCam = new PhotonCamera("topCam");
+    private final PhotonCamera bottomCam = new PhotonCamera("bottomCam");
 
     
     private final SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
@@ -85,6 +89,14 @@ public class Vision extends SubsystemBase {
         return (target != null) ? target.getBestCameraToTarget().getY() : -1;
     }
 
+    public boolean switchCam(PhotonCamera cam){
+        PhotonPipelineResult result = cam.getLatestResult();
+        
+        if(!result.hasTargets()) currentCam = !currentCam; // if current is bottom then -> top & vice versa
+
+        return currentCam;
+    }
+
     PhoenixPIDController turnPID = new PhoenixPIDController(0, 0, 0);
     PhoenixPIDController drivePID = new PhoenixPIDController(0, 0, 0);
     Timer tmr = new Timer();
@@ -132,12 +144,13 @@ public class Vision extends SubsystemBase {
             // return run(() -> {
             //     System.out.println("No April tag!");
             // });
-            System.out.println("No April tag!");
+            // System.out.println("No April tag!");
             drivetrain.setControl(
                 drive.withVelocityX(0) // Stop moving
                 .withVelocityY(0)
                 .withRotationalRate(0)
             );
+            camera = (switchCam(camera)) ? topCam : bottomCam;
         }
     }  
     public Command APT(){
