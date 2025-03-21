@@ -10,7 +10,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import java.rmi.server.RMIClassLoader;
 
-import org.photonvision.PhotonCamera; // gives yaw etc
+import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -33,7 +33,7 @@ public class Vision extends SubsystemBase {
     private final SwerveRequest.FieldCentricFacingAngle snapTo = new SwerveRequest.FieldCentricFacingAngle()
         .withDeadband(MaxSpeed*0.035)
         .withDriveRequestType(DriveRequestType.Velocity);
-    
+
     
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric();
             //.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate*0.1)
@@ -126,5 +126,3 @@ public class Vision extends SubsystemBase {
         });
     }              
 }
-    
-    
