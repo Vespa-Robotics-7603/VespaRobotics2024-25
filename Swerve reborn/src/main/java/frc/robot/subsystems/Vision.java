@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
     private final PhotonCamera camera;
-    private static final double TARGET_DISTANCE_METERS = 1.0; // Stop at 1 meter from the tag
+    private static final double distance2tag = 1.0; // Stop at 1 meter from the tag
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private final CommandSwerveDrivetrain drivetrain;
@@ -39,10 +39,10 @@ public class Vision extends SubsystemBase {
             //.withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate*0.1)
             //.withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-    public Vision(CommandSwerveDrivetrain train, String Cam_Var) {
+    public Vision(CommandSwerveDrivetrain train, String Cam) {
         System.out.println("Vision System Initialized");
         
-        this.camera = new PhotonCamera(Cam_Var);
+        this.camera = new PhotonCamera(Cam);
 
         // Print values from methods correctly
         System.out.println("Target Yaw: " + getTargetYaw());

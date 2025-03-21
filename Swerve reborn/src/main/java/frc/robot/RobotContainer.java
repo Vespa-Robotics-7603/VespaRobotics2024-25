@@ -40,7 +40,8 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    private final Vision visionSubsystem = new Vision(drivetrain, "topCam");
+    private final Vision visionSubsystem1 = new Vision(drivetrain, "topCam");
+    private final Vision visionSubsystem2 = new Vision(drivetrain, "bottomCam");
 
     public RobotContainer() {
         configureBindings();
@@ -77,7 +78,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //return Commands.print("No autonomous command configured");
-       return visionSubsystem.APT();
+       return visionSubsystem1.APT();
        //return new PathPlannerAuto("Test Auto but better");
         
     }
