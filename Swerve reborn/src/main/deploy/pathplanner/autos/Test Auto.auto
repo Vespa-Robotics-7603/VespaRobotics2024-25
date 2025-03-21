@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterOnePath"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Lift Elevator"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Output"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deposite Coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Intake Level"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
