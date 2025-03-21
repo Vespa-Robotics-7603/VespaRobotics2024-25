@@ -27,11 +27,12 @@ public class APT extends Command {
         PhotonCamera camera;
         camera = new PhotonCamera("topCamera");
         PhotonPipelineResult result = camera.getLatestResult();
+        
+        boolean currentCam = true; // true means top camera, false means bottom camera
+        boolean switchCam = (!result.hasTargets()) ? true :  false;
 
-        boolean SwitchCam = false;
-        SwitchCam = (!result.hasTargets()) ? true :  false;
-
-
+        if (switchCam == true && currentCam == true) currentCam = false; // if current is top then -> bottom
+        if (switchCam == true && currentCam == false) currentCam = true; // if current is bottom then -> top
     }
 
 }

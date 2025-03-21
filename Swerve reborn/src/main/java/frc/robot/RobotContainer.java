@@ -40,9 +40,6 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    private final Vision visionSubsystem1 = new Vision(drivetrain, "topCam");
-    private final Vision visionSubsystem2 = new Vision(drivetrain, "bottomCam");
-
     public RobotContainer() {
         configureBindings();
     }
