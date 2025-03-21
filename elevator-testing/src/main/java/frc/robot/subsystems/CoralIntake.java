@@ -14,27 +14,18 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class CoralIntake implements Subsystem {
     
-    public static CoralIntake singleInst;
-    public static CoralIntake getInst(){
-        if (singleInst == null) singleInst = new CoralIntake();
-        return singleInst;
-    }
-    
     VictorSPX intakeMotor = new VictorSPX(9);
     double turnInRot = 0.3;
     double turnOutRot = 1;
     double refVal = 0;
     ControlMode controlM = ControlMode.Position;
     
-    double turnInSpeed = 0.3;
-    double turnOutSpeed = -0.3;
-    
     public CoralIntake(){
         //TODO setup victor spx
         //setting pids (slot id, value)
-        // intakeMotor.config_kP(0,0.1);
-        // intakeMotor.config_kI(0, 0.1);
-        // intakeMotor.config_kD(0,1);
+        intakeMotor.config_kP(0,0.1);
+        intakeMotor.config_kI(0, 0.1);
+        intakeMotor.config_kD(0,1);
         //feed forwards I assume
         // intakeMotor.config_kF(0, 0);
         //velocity in sensor units per 100 ms???? ew
@@ -47,27 +38,35 @@ public class CoralIntake implements Subsystem {
     }
     
     public void CoralIn(){
-        intakeMotor.set(ControlMode.PercentOutput, turnInSpeed);
+        intakeMotor.set(ControlMode.PercentOutput,0.3);
     }
     
     public void CoralOut(){
-        intakeMotor.set(ControlMode.PercentOutput, turnOutSpeed);
+        intakeMotor.set(ControlMode.PercentOutput, -0.3);
     }
     
-    public void CoralStop() {
+    public void hold(){
+        System.out.println("HOLDING!!!!");
+        intakeMotor.set(ControlMode.PercentOutput, -0.07);
+    }
+    
+    public Command holdCom(){
+        return run(this::hold);
+    }
+    
+    @Override
+    public void periodic(){
+        //intakeMotor.set(controlM, refVal);
+    }
+    public void CoralStop(){
         intakeMotor.set(ControlMode.PercentOutput, 0);
     }
 
-    @Override
-    public void periodic(){
-        // intakeMotor.set(controlM, refVal);
+    public Command CoralInCom(){
+        return Commands.sequence(runOnce(this::CoralIn), new WaitCommand(1), runOnce(this::CoralStop));
     }
     
-    public Command CoralInCommand(){
-        return Commands.sequence(runOnce(this::CoralIn), new WaitCommand(0.5), runOnce(this::CoralStop));
-    }
-    
-    public Command CoralOutCommand(){
+    public Command CoralOutCom(){
         return Commands.sequence(runOnce(this::CoralOut), new WaitCommand(0.5), runOnce(this::CoralStop));
     }
 }

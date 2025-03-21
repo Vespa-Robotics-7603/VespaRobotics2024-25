@@ -16,28 +16,29 @@ import frc.robot.SwerveUtils.RevMotor.RevMotorSetPosition;
 
 public class Elevator implements Subsystem {
     
-    public static Elevator singleInst;
-    public static Elevator getInst(){
-        if (singleInst == null) singleInst = new Elevator();
-        return singleInst;
-    }
-    
     RevMotorSetPosition upDownMotor;
-
-    double l0 = 5;
-    double l1 = 110;
-    double l2 = 210;
-    double l3 = 333;
-    double intake = 5;
-    double[] levels = {l0,l1, l2, l3};
-    int currentLevel = 0;
     
+    
+    //TODO get actual max rotation when build is done
+    // double maxRot = 100;
+    //TODO get percent height of levels wanted
+    double intakePos = 100;
+    double l0 = 40;
+    double l1 = 100;
+    double l2 = 200;
+    double l3 = 330;
+    double[] levels = {l0, l1, l2, l3};
+    int currentLevel = 0;
+    //arm positions, one for intake, one for output
+    // double[] armPositions = {0.2, 0.30};
+    double currentheight = 40;
+
     public Elevator(){
         upDownMotor = (RevMotorSetPosition) new RevMotorSetPosition(
             new SparkMax(2, MotorType.kBrushless),
              true,
              levels
-        ).setMaxRot(325)
+        ).setMaxRot(400)//TODO get actual max rotation
         .setMinRot(-10);
         
         SparkMaxConfig config = new SparkMaxConfig();
@@ -49,11 +50,60 @@ public class Elevator implements Subsystem {
             .velocityConversionFactor(1.0/60.0);//Keep in rotaion per minute (ew) by default
         config.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pid(5, 0.0, 0);
+            .pid(1.2, 0.0, 0.1);
             
         upDownMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
+        // SparkMaxConfig configArm = new SparkMaxConfig();
+        // //TODO, find device id
+        // armMotor = (RevMotorSetPosition) new RevMotorSetPosition(
+        //     new SparkMax(1, MotorType.kBrushless),
+        //      true,
+        //      armPositions
+        // ).setMaxRot(100)//TODO get actual max rotation
+        // .setMinRot(1);
+        
+        // config
+        //     .inverted(false)
+        //     .idleMode(IdleMode.kBrake);
+        // config.encoder
+        //     .positionConversionFactor(1)//keeping in rotations
+        //     .velocityConversionFactor(1.0/60.0);// convert to rotations per second
+        // config.closedLoop
+        //     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        //     //TODO fix these
+        //     .pid(1.0, 0.0, 0.0);
+            
+        // armMotor.configure(configArm, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
+        // SparkMaxConfig configIntake = new SparkMaxConfig();
+        // //TODO, find device id
+        // coralIntakeMotor = new RevMotor(
+        //     new SparkMax(2, MotorType.kBrushless),
+        //      true
+        // ).setMaxRot(Double.POSITIVE_INFINITY)//TODO get actual max rotation
+        // .setMinRot(Double.NEGATIVE_INFINITY);
+        
+        // config
+        //     .inverted(false)
+        //     .idleMode(IdleMode.kBrake);
+        // config.encoder
+        //     .positionConversionFactor(1)//keeping in rotations
+        //     .velocityConversionFactor(1.0/60.0);// convert to rotations per second
+        // config.closedLoop
+        //     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        //     //TODO fix these
+        //     .pid(1.0, 0.0, 0.0);
+            
+        // coralIntakeMotor.configure(configIntake, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
     
+    public void incrementHeight(double increment) {
+        // TODO: bounds check
+        currentheight += increment;
+        System.out.println("New target elevator position: " + currentheight);
+        upDownMotor.goToRotation(currentheight);
+    }    
     
     public void goToHeightPercent(double percentHeight){
         upDownMotor.goToRotationPercent(percentHeight);
@@ -64,6 +114,13 @@ public class Elevator implements Subsystem {
         upDownMotor.goToRotation(levels[level]);
     }
     
+    public void moveElevator(double speed){
+        upDownMotor.Motor.set(speed);
+    }
+    
+    public Command moveElevatorCommand(double speed){
+        return run(()->{moveElevator(speed);});
+    }
     
     
     public void moveElavatorWithSpeed(double speed){
@@ -76,6 +133,7 @@ public class Elevator implements Subsystem {
         // armMotor.resetReference();
         // coralIntakeMotor.resetReference();
         //System.out.println("Running Periodic");
+        // System.out.println("Elevator position: " + upDownMotor.Motor.getEncoder().getPosition());
     }
     //Using run once here because the motor will continue to go to position/speed
     //it doesn't need to be called periodically, only when a change in motion is wanted
@@ -91,28 +149,93 @@ public class Elevator implements Subsystem {
         return runOnce(()->{moveElavatorWithSpeed(speed);});
     }
     
+    @Deprecated
+    public Command goToLevel2AndOutputTest(){
+        //test command chaining for outputting coral on level 2
+        Command f = new Command() {
+            @Override
+            public void execute(){
+                goToLevel(2);
+            }
+            
+            @Override
+            public boolean isFinished(){
+                double elevatorRot = upDownMotor.Motor.getEncoder().getPosition();
+                double wantedRot = upDownMotor.getRotationsFromPercent(l2);
+                double withinRange = 0.2;
+                if( 
+                    elevatorRot > wantedRot-withinRange
+                    && elevatorRot < wantedRot+withinRange
+                ){
+                    // within range, should end
+                    return false;
+                }
+                return true;
+            }
+        };
+        f.addRequirements(this);
+        
+        Command d = new Command() {
+            @Override
+            public void execute(){
+                // armOutput();
+            }
+            
+            @Override
+            public boolean isFinished(){
+                // double armRot = armMotor.Motor.getEncoder().getPosition();
+                // double wantedRot = armMotor.getRotationsFromPercent(l2);
+                // double withinRange = 0.2;
+                // if( 
+                //     armRot > wantedRot-withinRange
+                //     && armRot < wantedRot+withinRange
+                // ){
+                //     // within range, should end
+                //     return false;
+                // }
+                return true;
+            }
+            
+            @Override
+            public void end(boolean interrupted){
+                if(!interrupted){
+                    // CoralOut();
+                }
+            }
+        };
+        
+        
+        d.addRequirements(this);
+        
+        return f.andThen(d);
+    }
+
     public Command oneLevelUp(){
         return runOnce(()->{
             if(currentLevel < 3){
                 currentLevel++;
             }
-            System.out.println("currentLevel UP to:"+currentLevel);
+            
             goToLevel(currentLevel);
             
         });
     }
-    
     public Command oneLevelDown(){
         return runOnce(()->{
             if(currentLevel > 0){
                 currentLevel--;
-                System.out.println("currentLevel Down to:"+currentLevel);
-
             }
             goToLevel(currentLevel);
         });
         
     }
+
+    public Command positionIncrementCommand(double height) {
+        return runOnce(() -> {
+            incrementHeight(height);
+        });
+    }
+
     public Command toStart(){
         return runOnce(() ->{
             currentLevel = 0;
@@ -124,11 +247,6 @@ public class Elevator implements Subsystem {
     public Command RunCommandToDoThing(){
         return run(()->{
             //spin I guess
-        });
-    }
-    public Command toIntake(){
-        return runOnce(() ->{
-            upDownMotor.goToRotation(intake);
         });
     }
 }

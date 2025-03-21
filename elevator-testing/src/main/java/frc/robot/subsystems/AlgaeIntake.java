@@ -7,17 +7,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.SwerveUtils.RevMotor;
 
 public class AlgaeIntake implements Subsystem {
-    
-    public static AlgaeIntake singleInst;
-    public static AlgaeIntake getInst(){
-        if (singleInst == null) singleInst = new AlgaeIntake();
-        return singleInst;
-    }
-    
     RevMotor algeaMotor;
-    
-    double algaeInSpeed = 0.3;
-    double algaeOutSpeed =-0.3;
     
     public AlgaeIntake(){
         
@@ -25,13 +15,10 @@ public class AlgaeIntake implements Subsystem {
     }
     
     public void AlgaeIn(){
-        algeaMotor.Motor.set(algaeInSpeed);
+        algeaMotor.Motor.set(0.9);
     }
     public void AlgaeOut(){
-        algeaMotor.Motor.set(algaeOutSpeed);
-    }
-    public void Stop(){
-        algeaMotor.Motor.set(0);;
+        algeaMotor.Motor.set(-0.9);
     }
     
     @Override
@@ -41,16 +28,19 @@ public class AlgaeIntake implements Subsystem {
     
     public Command AlgaeInCommand(){
         return run(()->{
-            System.out.println("Algea In");
             AlgaeIn();
         });
     }
-    
-    public Command AlgaeOutCommand(){
-        return run(this::AlgaeOut);
+    public void stop(){
+        algeaMotor.Motor.set(0);
     }
     
-    public Command AlgaeStopCommand(){
-        return run(this::Stop);
+    public Command AlgaeOutCommand(){
+        return run(() -> {
+            AlgaeOut();
+        });
+    }
+    public Command AlgeaStopCommand(){
+        return run(this::stop);
     }
 }

@@ -36,7 +36,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class RevMotor {
     /** The actual motor  */
     public SparkMax Motor;
-    /** The Clossed loop controller, used to contorl speed */
+    /** The Closed loop controller, used to control speed */
     public SparkClosedLoopController CLController;
     /** Maximum rotations allowed for this motor  */
     protected double maxRot = 10;

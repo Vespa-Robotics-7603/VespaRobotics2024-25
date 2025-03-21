@@ -16,16 +16,12 @@ import frc.robot.SwerveUtils.RevMotor.RevMotorSetPosition;
 
 public class CoralPivot implements Subsystem{
     
-    public static CoralPivot singleInst;
-    public static CoralPivot getInst(){
-        if (singleInst == null) singleInst = new CoralPivot();
-        return singleInst;
-    }
     
-    public RevMotorSetPosition armMotor;
+    RevMotorSetPosition armMotor;
     //arm positions, one for intake, one for output
-    double outPos = 7.83;
+    double outPos = 5.83;
     double inPos = 13.12;
+    double currentposition = 0;
     // double[] armPositions = {outPos, inPos};
     
     public CoralPivot(){
@@ -34,7 +30,7 @@ public class CoralPivot implements Subsystem{
         armMotor = (RevMotorSetPosition) new RevMotorSetPosition(
             new SparkMax(3, MotorType.kBrushless),
              true,
-             inPos, outPos
+             outPos, inPos
         ).setMaxRot(13)//TODO get actual max rotation
         .setMinRot(-1);
         
@@ -62,21 +58,54 @@ public class CoralPivot implements Subsystem{
     public void armOutput(int level){
         armMotor.goToSetPosition(1);
     }
+
+    public void incrementHeight(double height) {
+        // TODO: bounds check
+        currentposition += height;
+        System.out.println("New target coral arm position: " + currentposition);
+        armMotor.goToRotation(currentposition);
+    }
+    
+    public void armWithSpeed(double speed){
+        armMotor.setSpeed(speed);
+    }
     
     @Override
     public void periodic(){
         armMotor.resetReference();
-        // System.out.println(armMotor.Motor.getEncoder().getPosition());
+        // System.out.println("Arm motor position: " + armMotor.Motor.getEncoder().getPosition());
     }
+
+    public Command positionIncrementCommand(double increment) {
+        return runOnce(() -> {
+            incrementHeight(increment);
+        });
+    }
+
     public Command toOutput(){
         return runOnce(() -> {
             armOutput(0);
         });
     }
+
     public Command toIntake(){
         return runOnce(() -> {
             armIntake();
         });
+    }
+    
+    public Command setSpeed(double speed){
+        return runOnce(()->{
+            this.setSpeed(speed);
+        });
+    }
+    
+    public void moveArm(double speed){
+        armMotor.Motor.set(speed);
+    }
+    
+    public Command moveArmCommand(double speed){
+        return run(()->{moveArm(speed);});
     }
 
     
