@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
+import static java.lang.Math.PI;
+
 public class TrajectoryFollower {
     CommandSwerveDrivetrain drivetrain;
     SwerveDriveKinematicsConstraint constraint;
@@ -30,9 +32,9 @@ public class TrajectoryFollower {
         new SwerveDriveKinematicsConstraint(drivetrain.getKinematics(), maxSpeed);
         // Create a voltage constraint to ensure we don't accelerate too fast
         controller = new HolonomicDriveController(
-            new PIDController(0.18, 0, 0), 
+            new PIDController(0.11, 0, 0), 
             new PIDController(0.18, 0, 0),
-            new ProfiledPIDController(0, 0, 0,
+            new ProfiledPIDController(11, 0, 0,
                 new TrapezoidProfile.Constraints(maxSpeed, 3.14)
             )
         );
@@ -62,7 +64,7 @@ public class TrajectoryFollower {
                 // Pass through these two interior waypoints, making an 's' curve path
                 List.of(/* new Translation2d(1, 1), new Translation2d(2, -1) */),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(1, 0, new Rotation2d(0)),
+                new Pose2d(0, 1, new Rotation2d(PI/2)),
                 // Pass config
                 config);
         // Trajectory f= 
