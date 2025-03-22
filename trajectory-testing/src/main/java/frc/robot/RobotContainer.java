@@ -16,12 +16,18 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 //import frc.robot.commands.FollowAprilTagCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.AlgaeIntake;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CoralIntake;
+import frc.robot.subsystems.CoralPivot;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.TrajectoryFollower;
 
-import frc.robot.subsystems.Vision;
+// import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -38,7 +44,14 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
+    // Subsystems
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final Elevator elevator = new Elevator();
+    public final CoralPivot arm = new CoralPivot();
+    public final CoralIntake intake = new CoralIntake();
+    public final AlgaeIntake algae = new AlgaeIntake();
+
+    // private final Vision visionSubsystem = new Vision(drivetrain);
 
     public RobotContainer() {
         configureBindings();
@@ -55,6 +68,21 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
+
+        CommandScheduler.getInstance().registerSubsystem(elevator, arm, intake, algae);
+        
+        joystick.povUp().onTrue(elevator.positionIncrementCommand(10));
+        joystick.povDown().onTrue(elevator.positionIncrementCommand(-10));
+
+        joystick.povLeft().whileTrue(arm.positionIncrementCommand(0.5));
+        joystick.povRight().whileTrue(arm.positionIncrementCommand(-0.5));
+        
+        joystick.x().onTrue(intake.CoralInCom());
+        joystick.y().onTrue(intake.CoralOutCom());
+        
+        joystick.rightTrigger().whileTrue(algae.AlgaeInCommand());
+        joystick.leftTrigger().whileTrue(algae.AlgaeOutCommand());
+
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
@@ -73,12 +101,10 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
-    private Vision cam = new Vision(drivetrain);
-
     public Command getAutonomousCommand() {
         //return Commands.print("No autonomous command configured");
-        return cam.APT();
-       //return new PathPlannerAuto("Test Auto but better");
+        // return visionSubsystem.followAprilTag();
         
+        return new TrajectoryFollower(drivetrain).FollowCommand();
     }
 }
