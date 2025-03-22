@@ -23,10 +23,10 @@ public class Elevator implements Subsystem {
     // double maxRot = 100;
     //TODO get percent height of levels wanted
     double intakePos = 100;
-    double l0 = 40;
-    double l1 = 100;
-    double l2 = 200;
-    double l3 = 330;
+    double l0 = 0;
+    double l1 = 85;
+    double l2 = 180;
+    double l3 = 320;
     double[] levels = {l0, l1, l2, l3};
     int currentLevel = 0;
     //arm positions, one for intake, one for output
