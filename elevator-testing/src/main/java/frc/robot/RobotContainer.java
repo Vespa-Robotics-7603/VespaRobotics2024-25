@@ -69,11 +69,11 @@ public class RobotContainer {
 
         CommandScheduler.getInstance().registerSubsystem(elevator, arm, intake, algae);
         
-        joystick.povUp().onTrue(elevator.positionIncrementCommand(10));
-        joystick.povDown().onTrue(elevator.positionIncrementCommand(-10));
+        joystick.povUp().onTrue(elevator.oneLevelUp());
+        joystick.povDown().onTrue(elevator.oneLevelDown());
 
-        joystick.povLeft().whileTrue(arm.positionIncrementCommand(0.5));
-        joystick.povRight().whileTrue(arm.positionIncrementCommand(-0.5));
+        joystick.povLeft().whileTrue(arm.toIntake());
+        joystick.povRight().whileTrue(arm.toOutput());
         
         joystick.x().onTrue(intake.CoralInCom());
         joystick.y().onTrue(intake.CoralOutCom());

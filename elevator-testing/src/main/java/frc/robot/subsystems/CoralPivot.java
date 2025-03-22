@@ -19,8 +19,8 @@ public class CoralPivot implements Subsystem{
     
     RevMotorSetPosition armMotor;
     //arm positions, one for intake, one for output
-    double outPos = 5.83;
-    double inPos = 13.12;
+    double outPos = 6.4;
+    double inPos = 13;
     double currentposition = 0;
     // double[] armPositions = {outPos, inPos};
     
