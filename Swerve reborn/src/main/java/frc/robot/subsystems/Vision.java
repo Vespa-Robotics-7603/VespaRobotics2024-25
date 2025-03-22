@@ -58,7 +58,7 @@ public class Vision extends SubsystemBase {
     public Vision(CommandSwerveDrivetrain drivetrain) {
         System.out.println("Vision System Initialized");
 
-        camera = topCam;
+        camera = (currentCam) ? topCam : bottomCam;
 
         // Print values from methods correctly
         System.out.println("Target Yaw: " + getTargetYaw());
