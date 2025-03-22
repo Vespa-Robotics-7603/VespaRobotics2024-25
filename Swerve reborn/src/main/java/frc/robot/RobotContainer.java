@@ -73,9 +73,11 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
+    private Vision cam = new Vision(drivetrain);
+
     public Command getAutonomousCommand() {
         //return Commands.print("No autonomous command configured");
-        return null;
+        return cam.APT();
        //return new PathPlannerAuto("Test Auto but better");
         
     }
