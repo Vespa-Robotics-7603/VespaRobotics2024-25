@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 //import frc.robot.commands.FollowAprilTagCommand;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.AlgaeIntake;
+import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.CoralIntake;
+import frc.robot.subsystems.CoralBucket;
 import frc.robot.subsystems.CoralPivot;
 import frc.robot.subsystems.Elevator;
 
@@ -46,8 +46,8 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final Elevator elevator = new Elevator();
     public final CoralPivot arm = new CoralPivot();
-    public final CoralIntake intake = new CoralIntake();
-    public final AlgaeIntake algae = new AlgaeIntake();
+    public final CoralBucket coral = new CoralBucket();
+    public final Algae algae = new Algae();
 
     // private final Vision visionSubsystem = new Vision(drivetrain);
 
@@ -67,7 +67,7 @@ public class RobotContainer {
             )
         );
 
-        CommandScheduler.getInstance().registerSubsystem(elevator, arm, intake, algae);
+        CommandScheduler.getInstance().registerSubsystem(elevator, arm, coral, algae);
         
         joystick.povUp().onTrue(elevator.oneLevelUp());
         joystick.povDown().onTrue(elevator.oneLevelDown());
@@ -75,11 +75,8 @@ public class RobotContainer {
         joystick.povLeft().whileTrue(arm.toIntake());
         joystick.povRight().whileTrue(arm.toOutput());
         
-        joystick.x().onTrue(intake.CoralInCom());
-        joystick.y().onTrue(intake.CoralOutCom());
-        
-        joystick.rightTrigger().whileTrue(algae.AlgaeInCommand());
-        joystick.leftTrigger().whileTrue(algae.AlgaeOutCommand());
+        joystick.rightTrigger().whileTrue(coral.CoralInCom()); //todo: make this dynamic and not a button
+        joystick.leftTrigger().whileTrue(coral.CoralOutCom());
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -93,8 +90,13 @@ public class RobotContainer {
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        joystick.rightBumper().whileTrue(algae.AlgaeIn());
+        joystick.leftBumper().whileTrue(algae.AlgaeOut());
+
+        // reset the field-centric heading on menu press
+        joystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        joystick.start().onTrue(Commands.print("drive train reset! :) so gracious! so professional!"));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

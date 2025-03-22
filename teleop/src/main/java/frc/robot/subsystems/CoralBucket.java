@@ -12,7 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPXConfiguration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
-public class CoralIntake implements Subsystem {
+public class CoralBucket implements Subsystem {
     
     VictorSPX intakeMotor = new VictorSPX(9);
     double turnInRot = 0.3;
@@ -20,7 +20,7 @@ public class CoralIntake implements Subsystem {
     double refVal = 0;
     ControlMode controlM = ControlMode.Position;
     
-    public CoralIntake(){
+    public CoralBucket(){
         //TODO setup victor spx
         //setting pids (slot id, value)
         intakeMotor.config_kP(0,0.1);
