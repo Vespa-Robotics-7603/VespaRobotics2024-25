@@ -66,6 +66,9 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
+        
+        algae.setDefaultCommand(algae.AlgeaStopCommand());
+        coral.setDefaultCommand(coral.holdCom());
 
         CommandScheduler.getInstance().registerSubsystem(elevator, arm, coral, algae);
         

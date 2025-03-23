@@ -23,9 +23,9 @@ public class CoralBucket implements Subsystem {
     public CoralBucket(){
         //TODO setup victor spx
         //setting pids (slot id, value)
-        intakeMotor.config_kP(0,0.1);
-        intakeMotor.config_kI(0, 0.1);
-        intakeMotor.config_kD(0,1);
+        // intakeMotor.config_kP(0,0.1);
+        // intakeMotor.config_kI(0, 0.1);
+        // intakeMotor.config_kD(0,1);
         //feed forwards I assume
         // intakeMotor.config_kF(0, 0);
         //velocity in sensor units per 100 ms???? ew
@@ -46,7 +46,7 @@ public class CoralBucket implements Subsystem {
     }
     
     public void hold(){
-        System.out.println("HOLDING!!!!");
+        // System.out.println("HOLDING!!!!");
         intakeMotor.set(ControlMode.PercentOutput, -0.07);
     }
     

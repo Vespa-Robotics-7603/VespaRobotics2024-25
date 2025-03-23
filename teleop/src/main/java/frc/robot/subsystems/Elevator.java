@@ -38,7 +38,7 @@ public class Elevator implements Subsystem {
             new SparkMax(2, MotorType.kBrushless),
              true,
              levels
-        ).setMaxRot(400)//TODO get actual max rotation
+        ).setMaxRot(340)//TODO get actual max rotation
         .setMinRot(-10);
         
         SparkMaxConfig config = new SparkMaxConfig();
