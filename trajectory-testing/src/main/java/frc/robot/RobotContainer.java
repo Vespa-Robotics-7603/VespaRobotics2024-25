@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.SwerveUtils.TrajectoryTarget2d;
 //import frc.robot.commands.FollowAprilTagCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.AlgaeIntake;
@@ -104,7 +105,10 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         //return Commands.print("No autonomous command configured");
         // return visionSubsystem.followAprilTag();
-        
-        return new TrajectoryFollower(drivetrain).FollowCommand();
+
+        // Move by 1 metre along both the X and Y at a targeted speed of
+        // 3 m/s, a targeted acceleration of 3 m/s^2, and a targeted rotation of PI/2 radians respectively.
+        TrajectoryTarget2d targetinfo = new TrajectoryTarget2d(1, 1, Math.PI / 2);
+        return new TrajectoryFollower(drivetrain).moveToTarget(3, 3, targetinfo);
     }
 }
