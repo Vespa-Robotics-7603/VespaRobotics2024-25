@@ -40,7 +40,7 @@ public class TrajectoryTarget2d {
     /**
      * Get every stored waypoint in TrajectoryTarget2d.
      *
-     * @return An ArrayList of every waypoint stored in an instance of TrajectoryTarget2d
+     * @return An ArrayList of every waypoint stored in an instance of TrajectoryTarget2d.
      */
     public ArrayList<Translation2d> getWaypoints() {
         return waypoints;
@@ -49,7 +49,7 @@ public class TrajectoryTarget2d {
     /**
      * Adds waypoints to the the trajectory target.
      *
-     * @param waypoints Waypoints to be added to the target trajectory
+     * @param waypoints Waypoints to be added to the target trajectory.
      */
     public void addWaypoints(Translation2d... waypoints) {
         for (int i = 0; i < waypoints.length; i++) {
