@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Vision extends SubsystemBase {
     private PhotonCamera camera;
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -45,8 +47,22 @@ public class Vision extends SubsystemBase {
         
         this.camera = new PhotonCamera(Cam);
 
+        //  ----
+        // MADE BY ROBERT 
+
+        double targetyaw = getTargetYaw();
+        double moddedyawtodeg = ((targetyaw)*(180/Math.PI)) % 360; 
+        // Changes yaw from (rad?) to deg and lops off all multiples (gets mod 360)
+
         // Print values from methods correctly
         System.out.println("Target Yaw: " + getTargetYaw());
+        System.out.println("The modified Yaw: " + moddedyawtodeg);
+
+        SmartDashboard.putNumber("Current Modified Yaw: ", moddedyawtodeg);
+        SmartDashboard.putNumber("Current Yaw: ", targetyaw);
+
+        // ----
+
         System.out.println("Target Distance: " + getTargetDistance());
         drivetrain = train;
 
