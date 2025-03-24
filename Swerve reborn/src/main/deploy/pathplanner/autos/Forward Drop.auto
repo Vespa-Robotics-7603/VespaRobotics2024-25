@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CenterOnePath"
+            "pathName": "ForwardDrop1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Lift Elevator"
+            "name": "Arm Output"
           }
         },
         {
@@ -25,25 +25,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Arm Output"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Deposite Coral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Elevator Intake Level"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Old Autos (Pre 2025-03-24)",
+  "folder": null,
   "choreoAuto": false
 }

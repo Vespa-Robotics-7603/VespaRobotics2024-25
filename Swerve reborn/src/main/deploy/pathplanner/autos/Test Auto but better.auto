@@ -14,6 +14,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Old Autos (Pre 2025-03-24)",
   "choreoAuto": false
 }

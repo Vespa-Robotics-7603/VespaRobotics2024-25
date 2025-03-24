@@ -79,6 +79,10 @@ public class RobotContainer {
         //return Commands.print("No autonomous command configured");
         return cam.APT();
        //return new PathPlannerAuto("Test Auto but better");
+
+       // PATH TO BE TESTED:
+       // return new PathPlannerAuto("Forward Drop");
+       // It should go forward, raise the arm, drop the coral and stop.
         
     }
 }
