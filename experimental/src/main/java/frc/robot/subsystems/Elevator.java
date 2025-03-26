@@ -38,7 +38,7 @@ public class Elevator implements Subsystem {
         upDownMotor = (RevMotorSetPosition) new RevMotorSetPosition(
             new SparkMax(2, MotorType.kBrushless),
              true,
-             GROUND_LEVEL, L2, L3
+             GROUND_LEVEL, L2, L3, L4
         ).setMaxRot(MAX_ROT)
         .setMinRot(MIN_ROT);
         

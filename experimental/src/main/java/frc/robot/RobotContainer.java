@@ -110,8 +110,8 @@ public class RobotContainer {
         joystick.povRight().onTrue(toInputPosition);
         
         //TRIGGER COMMANDS
-        joystick.leftTrigger(0.1).whileTrue(coral.CoralIn(joystick::getLeftTriggerAxis));
-        joystick.rightTrigger(0.1).whileTrue(coral.CoralOut(joystick::getRightTriggerAxis));
+        joystick.leftTrigger().whileTrue(coral.CoralIn(joystick::getLeftTriggerAxis));
+        joystick.rightTrigger().whileTrue(coral.CoralIn(joystick::getRightTriggerAxis));
         
         //BUMPER COMMANDS
         joystick.rightBumper().whileTrue(algae.AlgaeIn());
