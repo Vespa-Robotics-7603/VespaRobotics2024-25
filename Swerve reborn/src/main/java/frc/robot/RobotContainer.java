@@ -17,11 +17,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-//import frc.robot.commands.FollowAprilTagCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CoralPivot;
+import frc.robot.subsystems.Elevator;
+
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -83,6 +86,8 @@ public class RobotContainer {
        // PATH TO BE TESTED:
        // return new PathPlannerAuto("Forward Drop");
        // It should go forward, raise the arm, drop the coral and stop.
+        NamedCommands.registerCommand("Elevator Up", elevator.toAutoOutput());
+        NamedCommands.registerCommand("Coral Out", coral.CoralOutCom());
         
     }
 }
