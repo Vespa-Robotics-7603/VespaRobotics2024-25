@@ -17,12 +17,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Elevator Up"
@@ -43,13 +37,31 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Coral Out"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Down"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
           }
         },
         {
@@ -61,7 +73,37 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Pickup Coral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Three Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Up"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Out"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Down"
           }
         }
       ]
