@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "One Path"
+            "pathName": "Left1 Path"
           }
         },
         {
@@ -55,7 +55,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Two Path"
+            "pathName": "Left Two Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         }
       ]
