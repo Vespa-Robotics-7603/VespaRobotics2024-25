@@ -185,6 +185,7 @@ public class RobotContainer {
         // TrajectoryTarget2d targetinfo = new TrajectoryTarget2d(1, 1, Math.PI / 2);
         // return new TrajectoryFollower(drivetrain).moveToTarget(3, 3, targetinfo);
         return new PathPlannerAuto("1cM");
+        //return new PathPlannerAuto("Test Auto");
     }
     
     /**
