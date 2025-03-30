@@ -126,10 +126,28 @@ public class TrajectoryFollower {
             }, drivetrain), //first get run, should store the pose
             movementCommand,
             Commands.runOnce(()->{
+                /*                 
                 Pose2d oldPose2d = oldPose.get() //second call, should return stored value
                     .relativeTo(drivetrain.getPose())//this should give back an accurate pose
                 ;
-                drivetrain.resetPose(oldPose2d);
+                */
+
+                // So I'm about to do what is called a pro gamer move and
+                // ignore all good programming practices for the sake of
+                // having working code for tomorrow.
+                //
+                // Forgive me father for I have sinned.
+                Pose2d resetpose = oldPose.get();
+                resetpose = new Pose2d(
+                    resetpose.getX(),
+                    resetpose.getY(),
+                    // This should reverse the rotation value with which
+                    // the drivetrain resets its pose, which should (in theory)
+                    // be enough to reset the drivetrain's pose back to its
+                    // old reference point. 
+                    resetpose.getRotation().unaryMinus()
+                );
+                drivetrain.resetPose(resetpose);
             }, drivetrain)
         );
         

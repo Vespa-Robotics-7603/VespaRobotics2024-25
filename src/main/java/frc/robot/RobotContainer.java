@@ -136,6 +136,22 @@ public class RobotContainer {
         // reset the field-centric heading on menu press
         joystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         joystick.start().onTrue(Commands.print("drive train reset! :) so gracious! so professional!"));
+
+        // TODO: don't hardcode alignment values
+        Command intakecommand = APTFollower.alignWithTag(1, 
+            // new FollowTagData(11, 0.5, 0.16, Math.PI, joystick.y())
+            FollowTagData.constructTagDatas(0.5, -0.3, Math.PI - Math.PI / 6, joystick.y(), AprilTagData.INTAKE_TAGS)
+        );
+
+        Command leftcoralcommand = APTFollower.alignWithTag(1, 
+            // new FollowTagData(11, 0.5, 0.16, Math.PI, joystick.y())
+            FollowTagData.constructTagDatas(0.5, 0.16, Math.PI, joystick.y(), AprilTagData.REEF_TAGS)
+        );
+
+        Command rightcoralcommand = APTFollower.alignWithTag(1, 
+            // new FollowTagData(11, 0.5, 0.16, Math.PI, joystick.y())
+            FollowTagData.constructTagDatas(0.5, -0.16, Math.PI, joystick.y(), AprilTagData.REEF_TAGS)
+        );
         
         // Command findTag = APTFollower.alignWithTag(1, 
         //     new FollowTagData(11, 0.5,0, Math.PI, joystick.y())
