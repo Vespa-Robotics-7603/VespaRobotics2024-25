@@ -174,6 +174,4 @@ public class AprilTagFollower {
             this.cancelCondition = cancelCondition;
         }
     }
-
-
 }
