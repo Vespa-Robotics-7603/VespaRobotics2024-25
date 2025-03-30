@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.SwerveUtils.AprilTagFollower;
 import frc.robot.SwerveUtils.AprilTagFollower.FollowTagData;
+import frc.robot.constants.AprilTagData;
 import frc.robot.SwerveUtils.TrajectoryTarget2d;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Algae;
@@ -136,12 +137,26 @@ public class RobotContainer {
         // reset the field-centric heading on menu press
         joystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         joystick.start().onTrue(Commands.print("drive train reset! :) so gracious! so professional!"));
+
+        // TODO: don't hardcode alignment values
+        Command intakecommand = APTFollower.alignWithTag(1, 
+            // new FollowTagData(11, 0.5, 0.16, Math.PI, joystick.y())
+            FollowTagData.constructTagDatas(0.5, -0.3, Math.PI - Math.PI / 6, joystick.y(), AprilTagData.INTAKE_TAGS)
+        );
+
+        Command leftcoralcommand = APTFollower.alignWithTag(1, 
+            // new FollowTagData(11, 0.5, 0.16, Math.PI, joystick.y())
+            FollowTagData.constructTagDatas(0.5, 0.16, Math.PI, joystick.y(), AprilTagData.REEF_TAGS)
+        );
+
+        Command rightcoralcommand = APTFollower.alignWithTag(1, 
+            // new FollowTagData(11, 0.5, 0.16, Math.PI, joystick.y())
+            FollowTagData.constructTagDatas(0.5, -0.16, Math.PI, joystick.y(), AprilTagData.REEF_TAGS)
+        );
         
-        // Command findTag = APTFollower.alignWithTag(1, 
-        //     new FollowTagData(11, 0.5,0, Math.PI, joystick.y())
-        // );
-        
-        // joystick.b().onTrue(findTag);
+        joystick.a().onTrue(intakecommand);
+        joystick.b().onTrue(leftcoralcommand);
+        joystick.x().onTrue(rightcoralcommand);
         // drivetrain.resetPose(null);
         
         // joystick.b().onTrue(
@@ -152,16 +167,16 @@ public class RobotContainer {
         //     )
         // );
         
-        joystick.b().whileTrue(
-             drivetrain.applyRequest(() -> driveLowerSpeed
-                 .withVelocityX(-joystick.getLeftY() * (MaxSpeed/2)) // Drive forward with negative Y (forward)
-                 .withVelocityY(-joystick.getLeftX() * (MaxSpeed/2)) // Drive left with negative X (left)
-                 .withRotationalRate(-joystick.getRightX() * (MaxAngularRate/2)) // Drive counterclockwise with negative X (left)
-             )
-         );
+        // joystick.b().whileTrue(
+        //     drivetrain.applyRequest(() -> driveLowerSpeed
+        //         .withVelocityX(-joystick.getLeftY() * (MaxSpeed/2)) // Drive forward with negative Y (forward)
+        //         .withVelocityY(-joystick.getLeftX() * (MaxSpeed/2)) // Drive left with negative X (left)
+        //         .withRotationalRate(-joystick.getRightX() * (MaxAngularRate/2)) // Drive counterclockwise with negative X (left)
+        //     )
+        // );
 
         //GENERATED COMMANDS (can be replaced)
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));
@@ -183,7 +198,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Roll Off", algae.RollOffCommand());
         NamedCommands.registerCommand("Stop Rolling", algae.AlgaeStopCommand());
         NamedCommands.registerCommand("Output Position", arm.toOutput());
-        NamedCommands.registerCommand("Debug", Commands.print("DEBUGING"));
+        NamedCommands.registerCommand("Debug", Commands.print("DEBUGGING"));
         //return Commands.print("No autonomous command configured");
         // TrajectoryTarget2d targetinfo = new TrajectoryTarget2d(1, 1, Math.PI / 2);
         // return new TrajectoryFollower(drivetrain).moveToTarget(3, 3, targetinfo);

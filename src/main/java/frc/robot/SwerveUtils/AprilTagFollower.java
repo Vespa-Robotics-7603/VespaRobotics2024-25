@@ -166,6 +166,7 @@ public class AprilTagFollower {
         double offsetY;
         double offsetYaw;
         BooleanSupplier cancelCondition;
+
         public FollowTagData(int id, double offsetX, double offsetY, double offsetYaw, BooleanSupplier cancelCondition) {
             this.id = id;
             this.offsetX = offsetX;
@@ -173,5 +174,15 @@ public class AprilTagFollower {
             this.offsetYaw = offsetYaw;
             this.cancelCondition = cancelCondition;
         }
+
+        public static FollowTagData[] constructTagDatas(double offsetX, double offsetY, double offsetYaw, BooleanSupplier cancelCondition, int... ids) {
+            FollowTagData[] tagdata = new FollowTagData[ids.length];
+            for (int i = 0; i < ids.length; i++) {
+                tagdata[i] = new FollowTagData(ids[i], offsetX, offsetY, offsetYaw, cancelCondition);
+            }
+            return tagdata;
+        }
     }
+
+
 }
