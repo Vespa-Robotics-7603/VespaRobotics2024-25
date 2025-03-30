@@ -56,7 +56,7 @@ public class Algae implements Subsystem { // i love big green balls
         
         return Commands.race(
             AlgaeOut(),
-            new WaitCommand(1)
+            new WaitCommand(0.5)
         ).andThen(runOnce(this::stop));
     }
 }

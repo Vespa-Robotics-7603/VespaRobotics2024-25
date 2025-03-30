@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Debug"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 0.1

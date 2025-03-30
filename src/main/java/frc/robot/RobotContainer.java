@@ -183,7 +183,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Roll Off", algae.RollOffCommand());
         NamedCommands.registerCommand("Stop Rolling", algae.AlgaeStopCommand());
         NamedCommands.registerCommand("Output Position", arm.toOutput());
-        NamedCommands.registerCommand("Debug", Commands.print("DEBuGGING"));
+        NamedCommands.registerCommand("Debug", Commands.print("DEBUGING"));
         //return Commands.print("No autonomous command configured");
         // TrajectoryTarget2d targetinfo = new TrajectoryTarget2d(1, 1, Math.PI / 2);
         // return new TrajectoryFollower(drivetrain).moveToTarget(3, 3, targetinfo);
